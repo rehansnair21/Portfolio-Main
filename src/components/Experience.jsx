@@ -7,41 +7,35 @@ import { experiences } from "../data/portfolioData.js";
 function CertificateModal({ src, pdf, label, onClose }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
+      {/* Close button — top-right corner */}
+      <button
+        onClick={onClose}
+        className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition hover:bg-accent hover:text-ink"
+        aria-label="Close"
+      >
+        <X size={18} />
+      </button>
+
       <div
-        className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl shadow-2xl"
+        className="relative w-full max-w-3xl overflow-hidden rounded-2xl shadow-2xl"
         style={{ maxHeight: "90vh" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal header */}
-        <div className="flex items-center justify-between bg-[#1a1a1a] px-5 py-3">
-          <span className="flex items-center gap-2 text-sm font-bold text-accent">
-            <Award size={16} /> {label}
-          </span>
-          <button
-            onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-accent hover:text-ink"
-            aria-label="Close certificate"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        {/* Content */}
         {pdf ? (
           <iframe
             src={pdf}
             title={label}
-            className="w-full bg-white"
-            style={{ height: "75vh" }}
+            className="w-full"
+            style={{ height: "88vh", border: "none" }}
           />
         ) : (
           <img
             src={src}
             alt={label}
-            className="w-full object-contain bg-white"
+            className="w-full object-contain"
           />
         )}
       </div>
