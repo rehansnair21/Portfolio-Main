@@ -1,43 +1,41 @@
 import { useState } from "react";
-import { Building2, CalendarDays, MapPin, Award, X } from "lucide-react";
+import { Building2, CalendarDays, MapPin, ShieldCheck, X, BadgeCheck } from "lucide-react";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 import { experiences } from "../data/portfolioData.js";
 
-function CertificateModal({ src, pdf, label, onClose }) {
+function CertificateModal({ src, label, onClose }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md"
       onClick={onClose}
     >
-      {/* Close button — top-right corner */}
-      <button
-        onClick={onClose}
-        className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition hover:bg-accent hover:text-ink"
-        aria-label="Close"
-      >
-        <X size={18} />
-      </button>
-
       <div
-        className="relative w-full max-w-3xl overflow-hidden rounded-2xl shadow-2xl"
-        style={{ maxHeight: "90vh" }}
+        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl shadow-2xl ring-2 ring-accent/40"
         onClick={(e) => e.stopPropagation()}
       >
-        {pdf ? (
-          <iframe
-            src={pdf}
-            title={label}
-            className="w-full"
-            style={{ height: "88vh", border: "none" }}
-          />
-        ) : (
+        {/* Modal header */}
+        <div className="flex items-center justify-between bg-ink px-5 py-3">
+          <div className="flex items-center gap-2 text-accent">
+            <BadgeCheck size={18} />
+            <span className="text-sm font-bold uppercase tracking-widest">{label}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-accent hover:text-ink"
+            aria-label="Close certificate"
+          >
+            <X size={16} />
+          </button>
+        </div>
+        {/* Certificate image */}
+        <div className="overflow-auto bg-white">
           <img
             src={src}
             alt={label}
             className="w-full object-contain"
           />
-        )}
+        </div>
       </div>
     </div>
   );
@@ -59,7 +57,6 @@ export default function Experience() {
           <ol className="space-y-12">
             {experiences.map((e, i) => {
               const left = i % 2 === 0;
-              const hasCert = e.certificate || e.certificatePdf;
               return (
                 <li key={e.company} className="relative md:grid md:grid-cols-2 md:gap-14">
                   <span className="absolute left-5 top-8 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-4 border-ink bg-accent ring-2 ring-accent md:left-1/2" />
@@ -69,6 +66,7 @@ export default function Experience() {
                         left ? "bg-white text-ink" : "bg-charcoal text-white ring-1 ring-white/15"
                       }`}
                     >
+                      {/* Header */}
                       <div className="mb-4 flex items-center gap-4">
                         <div
                           className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-accent text-ink"
@@ -82,6 +80,7 @@ export default function Experience() {
                         </div>
                       </div>
 
+                      {/* Duration & mode badges */}
                       <div className="mb-4 flex flex-wrap gap-2 text-sm font-semibold">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-ink">
                           <CalendarDays size={14} /> {e.duration}
@@ -95,6 +94,7 @@ export default function Experience() {
                         </span>
                       </div>
 
+                      {/* Bullet points */}
                       <ul className="space-y-2 text-sm leading-relaxed sm:text-base">
                         {e.points.map((p) => (
                           <li key={p} className="flex gap-2">
@@ -104,6 +104,7 @@ export default function Experience() {
                         ))}
                       </ul>
 
+                      {/* Tech badges */}
                       <ul className="mt-5 flex flex-wrap gap-2">
                         {e.tech.map((t) => (
                           <li
@@ -118,21 +119,23 @@ export default function Experience() {
                       </ul>
 
                       {/* Verify Certificate button */}
-                      {hasCert && (
+                      {e.certificate && (
                         <div className="mt-5">
                           <button
                             onClick={() =>
-                              setActiveCert({
-                                src: e.certificate || null,
-                                pdf: e.certificatePdf || null,
-                                label: e.certificateLabel || "Internship Certificate",
-                              })
+                              setActiveCert({ src: e.certificate, label: e.certificateLabel })
                             }
-                            className={`inline-flex items-center gap-2 rounded-full border-2 border-accent px-5 py-2 text-sm font-bold transition duration-200 hover:bg-accent hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent ${
-                              left ? "text-ink" : "text-accent"
+                            className={`group inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-sm font-bold transition-all duration-200 hover:scale-105 active:scale-95 ${
+                              left
+                                ? "border-ink bg-ink text-accent hover:bg-accent hover:text-ink hover:border-accent"
+                                : "border-accent bg-transparent text-accent hover:bg-accent hover:text-ink"
                             }`}
+                            aria-label={`Verify ${e.company} certificate`}
                           >
-                            <Award size={15} />
+                            <ShieldCheck
+                              size={16}
+                              className="transition-transform duration-200 group-hover:rotate-12"
+                            />
                             Verify Certificate
                           </button>
                         </div>
@@ -146,11 +149,10 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Certificate modal — image or PDF */}
+      {/* Certificate lightbox modal */}
       {activeCert && (
         <CertificateModal
           src={activeCert.src}
-          pdf={activeCert.pdf}
           label={activeCert.label}
           onClose={() => setActiveCert(null)}
         />
