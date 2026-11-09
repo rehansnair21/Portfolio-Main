@@ -104,27 +104,18 @@ export default function Experience() {
                         ))}
                       </ul>
 
-                      {/* Certificate thumbnail */}
+                      {/* Verify Certificate button */}
                       {e.certificate && (
                         <div className="mt-5">
-                          <p className={`mb-2 text-xs font-semibold uppercase tracking-widest ${left ? "text-muted" : "text-white/50"}`}>
-                            Internship Certificate
-                          </p>
                           <button
                             onClick={() => setActiveCert({ src: e.certificate, label: e.certificateLabel })}
-                            className="group relative w-full overflow-hidden rounded-xl border-2 border-accent/40 transition hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                            className={`inline-flex items-center gap-2 rounded-full border-2 border-accent px-5 py-2 text-sm font-bold transition duration-200 hover:bg-accent hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent ${
+                              left ? "text-ink" : "text-accent"
+                            }`}
                             aria-label={e.certificateLabel}
                           >
-                            <img
-                              src={e.certificate}
-                              alt="Syntecxhub Internship Certificate"
-                              className="w-full object-cover transition duration-300 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                              <span className="flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-ink">
-                                <Award size={16} /> View Certificate
-                              </span>
-                            </div>
+                            <Award size={15} />
+                            Verify Certificate
                           </button>
                         </div>
                       )}
