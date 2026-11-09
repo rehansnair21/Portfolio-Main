@@ -4,28 +4,46 @@ import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 import { experiences } from "../data/portfolioData.js";
 
-function CertificateModal({ src, label, onClose }) {
+function CertificateModal({ src, pdf, label, onClose }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] max-w-3xl w-full overflow-hidden rounded-2xl shadow-2xl"
+        className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl shadow-2xl"
+        style={{ maxHeight: "90vh" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-accent hover:text-ink"
-          aria-label="Close certificate"
-        >
-          <X size={18} />
-        </button>
-        <img
-          src={src}
-          alt={label}
-          className="w-full object-contain"
-        />
+        {/* Modal header */}
+        <div className="flex items-center justify-between bg-[#1a1a1a] px-5 py-3">
+          <span className="flex items-center gap-2 text-sm font-bold text-accent">
+            <Award size={16} /> {label}
+          </span>
+          <button
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-accent hover:text-ink"
+            aria-label="Close certificate"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Content */}
+        {pdf ? (
+          <iframe
+            src={pdf}
+            title={label}
+            className="w-full bg-white"
+            style={{ height: "75vh" }}
+          />
+        ) : (
+          <img
+            src={src}
+            alt={label}
+            className="w-full object-contain bg-white"
+          />
+        )}
       </div>
     </div>
   );
@@ -47,6 +65,7 @@ export default function Experience() {
           <ol className="space-y-12">
             {experiences.map((e, i) => {
               const left = i % 2 === 0;
+              const hasCert = e.certificate || e.certificatePdf;
               return (
                 <li key={e.company} className="relative md:grid md:grid-cols-2 md:gap-14">
                   <span className="absolute left-5 top-8 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-4 border-ink bg-accent ring-2 ring-accent md:left-1/2" />
@@ -105,14 +124,19 @@ export default function Experience() {
                       </ul>
 
                       {/* Verify Certificate button */}
-                      {e.certificate && (
+                      {hasCert && (
                         <div className="mt-5">
                           <button
-                            onClick={() => setActiveCert({ src: e.certificate, label: e.certificateLabel })}
+                            onClick={() =>
+                              setActiveCert({
+                                src: e.certificate || null,
+                                pdf: e.certificatePdf || null,
+                                label: e.certificateLabel || "Internship Certificate",
+                              })
+                            }
                             className={`inline-flex items-center gap-2 rounded-full border-2 border-accent px-5 py-2 text-sm font-bold transition duration-200 hover:bg-accent hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent ${
                               left ? "text-ink" : "text-accent"
                             }`}
-                            aria-label={e.certificateLabel}
                           >
                             <Award size={15} />
                             Verify Certificate
@@ -128,10 +152,11 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Lightbox modal */}
+      {/* Certificate modal — image or PDF */}
       {activeCert && (
         <CertificateModal
           src={activeCert.src}
+          pdf={activeCert.pdf}
           label={activeCert.label}
           onClose={() => setActiveCert(null)}
         />

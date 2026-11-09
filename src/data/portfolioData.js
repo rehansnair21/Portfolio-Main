@@ -20,7 +20,6 @@ import movieLensAbout from "../assets/projects/movielens-about.jpg";
 import msCybersecurityImg from "../assets/certificates/microsoft-cybersecurity-analyst.svg";
 import scrumCertImg from "../assets/certificates/scrum-fundamentals-certified.jpg";
 import syntecxhubCertImg from "../assets/certificates/syntecxhub-internship-certificate.png";
-import ainsoftCertImg from "../assets/certificates/ainsoft-internship-certificate.jpg";
 
 export const personal = {
   name: "Rehan S Nair",
@@ -111,8 +110,8 @@ export const experiences = [
       "Managed source code using Git and GitHub.",
     ],
     tech: ["React.js", "Node.js", "Express.js", "MongoDB", "Postman", "GitHub"],
-    certificate: ainsoftCertImg,
-    certificateLabel: "View Ainsoft Internship Certificate",
+    certificatePdf: "/certificates/ainsoft-internship-certificate.pdf",
+    certificateLabel: "View Internship Certificate",
   },
 ];
 
