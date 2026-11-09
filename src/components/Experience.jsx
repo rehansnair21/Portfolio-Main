@@ -1,9 +1,39 @@
-import { Building2, CalendarDays, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Building2, CalendarDays, MapPin, Award, X } from "lucide-react";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 import { experiences } from "../data/portfolioData.js";
 
+function CertificateModal({ src, label, onClose }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[90vh] max-w-3xl w-full overflow-hidden rounded-2xl shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-accent hover:text-ink"
+          aria-label="Close certificate"
+        >
+          <X size={18} />
+        </button>
+        <img
+          src={src}
+          alt={label}
+          className="w-full object-contain"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function Experience() {
+  const [activeCert, setActiveCert] = useState(null);
+
   return (
     <section id="experience" className="px-3 pb-24 sm:px-6">
       <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-ink px-6 py-16 text-white sm:px-12">
@@ -73,6 +103,31 @@ export default function Experience() {
                           </li>
                         ))}
                       </ul>
+
+                      {/* Certificate thumbnail */}
+                      {e.certificate && (
+                        <div className="mt-5">
+                          <p className={`mb-2 text-xs font-semibold uppercase tracking-widest ${left ? "text-muted" : "text-white/50"}`}>
+                            Internship Certificate
+                          </p>
+                          <button
+                            onClick={() => setActiveCert({ src: e.certificate, label: e.certificateLabel })}
+                            className="group relative w-full overflow-hidden rounded-xl border-2 border-accent/40 transition hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                            aria-label={e.certificateLabel}
+                          >
+                            <img
+                              src={e.certificate}
+                              alt="Syntecxhub Internship Certificate"
+                              className="w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                              <span className="flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-ink">
+                                <Award size={16} /> View Certificate
+                              </span>
+                            </div>
+                          </button>
+                        </div>
+                      )}
                     </article>
                   </Reveal>
                 </li>
@@ -81,6 +136,15 @@ export default function Experience() {
           </ol>
         </div>
       </div>
+
+      {/* Lightbox modal */}
+      {activeCert && (
+        <CertificateModal
+          src={activeCert.src}
+          label={activeCert.label}
+          onClose={() => setActiveCert(null)}
+        />
+      )}
     </section>
   );
 }

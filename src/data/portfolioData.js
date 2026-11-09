@@ -19,6 +19,7 @@ import movieLensRegistration from "../assets/projects/movielens-registration.png
 import movieLensAbout from "../assets/projects/movielens-about.jpg";
 import msCybersecurityImg from "../assets/certificates/microsoft-cybersecurity-analyst.svg";
 import scrumCertImg from "../assets/certificates/scrum-fundamentals-certified.jpg";
+import syntecxhubCertImg from "../assets/certificates/syntecxhub-internship-certificate.png";
 
 export const personal = {
   name: "Rehan S Nair",
@@ -93,6 +94,8 @@ export const experiences = [
       "Used Git for version control and team collaboration.",
     ],
     tech: ["HTML5", "CSS3", "JavaScript", "Bootstrap", "Git"],
+    certificate: syntecxhubCertImg,
+    certificateLabel: "View Internship Certificate",
   },
   {
     company: "Ainsoft Solutions Pvt. Ltd.",
